@@ -46,7 +46,7 @@ def polyfit(x1, x2, deg, regularization=0, y = None, show_sums_of_squares=False)
     ridge_reg = Ridge(alpha=regularization)
     
     # Fit the model
-    Ridge() # TODO: check https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html for further information
+    ridge_reg.fit(x1, x2) # TODO: check https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html for further information
     
     # Generate x values for the regression line/curve
     x = np.random.uniform(low=np.min(x1), high=np.max(x1), size=1000) # TODO: Generate 1000 samples between the minimum and maximum values of x1
