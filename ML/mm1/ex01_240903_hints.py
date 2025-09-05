@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
+from sklearn.metrics import mean_squared_error
 
 ## %%
 # Load data
@@ -46,20 +47,20 @@ def polyfit(x1, x2, deg, regularization=0, y = None, show_sums_of_squares=False)
     ridge_reg = Ridge(alpha=regularization)
     
     # Fit the model
-    ridge_reg.fit(x1, x2) # TODO: check https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html for further information
+    ridge_reg.fit(x1_poly, x2) # TODO: check https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html for further information
     
     # Generate x values for the regression line/curve
-    x = np.random.uniform(low=np.min(x1), high=np.max(x1), size=1000) # TODO: Generate 1000 samples between the minimum and maximum values of x1
+    x = np.linspace(np.min(x1), np.max(x1), 1000) # TODO: Generate 1000 samples between the minimum and maximum values of x1
     X_poly = poly.transform(x[:, np.newaxis])
     
     # Predict y_hat values
-    y_hat = ... # Use the ridge regression to predict x2 given x1
+    y_hat = ridge_reg.predict(X_poly) # Use the ridge regression to predict x2 given x1
     
     # Extract coefficients
     coefs = ridge_reg.intercept_, *ridge_reg.coef_[1:]
     
     # Here we calculate mean-square-error (MSE)
-    MSE = ... # TODO: implement MSE equation
+    MSE = mean_squared_error(x2,ridge_reg.predict(x1_poly)) # TODO: implement MSE equation
 
     # At last we plot the observation and the regression line/curve
     plt.figure()
@@ -86,7 +87,7 @@ def polyfit(x1, x2, deg, regularization=0, y = None, show_sums_of_squares=False)
 
 ## %%
 # 1) Experiment with different polynomial degrees:
-deg = 0
+deg = 9
 
 coefs, mse = polyfit(x1_sub, x2_sub, deg=deg, y=y, show_sums_of_squares=True)
 print('MSE = ', round(mse,3))
@@ -94,9 +95,9 @@ print('MSE = ', round(mse,3))
 ## %%
 # 2) Explore L2 regularization:
 deg = 9
-reg = 1e-1
+reg = 10
 
-coefs, mse = ... # TODO
+coefs, mse = polyfit(x1_sub, x2_sub, deg=deg, regularization=reg, y=y) # TODO
 print('MSE = ', round(mse,3))
 
 ## %%
