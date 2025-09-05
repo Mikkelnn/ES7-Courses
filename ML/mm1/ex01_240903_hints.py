@@ -49,7 +49,7 @@ def polyfit(x1, x2, deg, regularization=0, y = None, show_sums_of_squares=False)
     Ridge() # TODO: check https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html for further information
     
     # Generate x values for the regression line/curve
-    x = ... # TODO: Generate 1000 samples between the minimum and maximum values of x1
+    x = np.random.uniform(low=np.min(x1), high=np.max(x1), size=1000) # TODO: Generate 1000 samples between the minimum and maximum values of x1
     X_poly = poly.transform(x[:, np.newaxis])
     
     # Predict y_hat values
@@ -86,7 +86,7 @@ def polyfit(x1, x2, deg, regularization=0, y = None, show_sums_of_squares=False)
 
 ## %%
 # 1) Experiment with different polynomial degrees:
-deg = 5
+deg = 0
 
 coefs, mse = polyfit(x1_sub, x2_sub, deg=deg, y=y, show_sums_of_squares=True)
 print('MSE = ', round(mse,3))
