@@ -1,3 +1,13 @@
+# ################################### 
+# Group ID : 343
+# Members : Johan Theil, Marcus Hodal, Mikkel Nielsen 
+# Date : 2025/09/05 
+# Lecture: 1 Introduction to machine learning
+# Dependencies: Virtual enviroment
+# Python version: 3
+# Functionality: Short Description. This script shows overfitting, 
+# ridge regression, and sample dependency 
+# ################################### 
 ## %%
 import os
 import numpy as np
