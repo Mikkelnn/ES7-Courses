@@ -95,7 +95,7 @@ print('MSE = ', round(mse,3))
 ## %%
 # 2) Explore L2 regularization:
 deg = 9
-reg = 10
+reg = 0.1
 
 coefs, mse = polyfit(x1_sub, x2_sub, deg=deg, regularization=reg, y=y) # TODO
 print('MSE = ', round(mse,3))
