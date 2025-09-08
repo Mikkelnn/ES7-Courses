@@ -104,15 +104,15 @@ print('MSE = ', round(mse,3))
 # 3) Investigate the effect of sample size.
 np.random.seed(100)
 
-sample_points = 100
-sample_idx = ... # TODO
+sample_points = 100000
+sample_idx = np.sort(np.random.choice(len(x1), sample_points)) # TODO
 
-x1_sub_100 = ... # TODO
-x2_sub_100 = ... # TODO
+x1_sub_100 = np.take(x1, sample_idx) # TODO
+x2_sub_100 = np.take(x2, sample_idx) # TODO
 
 
 deg = 9
-reg = 1e-2
+reg = 10
 coefs, mse = polyfit(x1_sub_100, x2_sub_100, deg=deg, regularization=reg, y=y)
 print('MSE = ', round(mse,3))
 
