@@ -12,6 +12,10 @@
 
 
 import numpy as np
+import matplotlib.pyplot as plt
+
+from matplotlib.patches import Ellipse
+import matplotlib.transforms as transforms
 
 # Train data
 train_x = np.loadtxt("dataset1_G_noisy_ASCII/trn_x.txt")
@@ -47,9 +51,24 @@ test_xy_126_label = np.loadtxt("dataset1_G_noisy_ASCII/tst_xy_126_class.txt")
 
 ## In[ ]:
 
-
 # Hint: look at: https://matplotlib.org/stable/gallery/statistics/confidence_ellipse.html 
+colors = ['tab:blue', 'tab:orange']
 
+fig, ax = plt.subplots()
+ax.scatter(train_x[:,0], train_x[:,1], 
+            c=colors[0], label='x',
+            alpha=0.3, edgecolors='none')
+
+ax.scatter(train_y[:,0], train_y[:,1], 
+            c=colors[1], label='Y',
+            alpha=0.3, edgecolors='none')
+
+ax.legend()
+ax.grid(True)
+
+plt.show()
+
+exit()
 
 # ### (a) classify instances in tst_xy, and use the corresponding label file tst_xy_class to calculate the accuracy;
 
