@@ -1,3 +1,13 @@
+# ################################### 
+# Group ID : 343
+# Members : Johan Theil, Marcus Hodal, Mikkel Nielsen 
+# Date : 2025/09/12 
+# Lecture: 2 Bayesian decision theory
+# Dependencies: Virtual enviroment
+# Python version: 3
+# Functionality: Short Description. This script shows overfitting, 
+# ridge regression, and sample dependency 
+# ################################### 
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -13,9 +23,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-
-from matplotlib.patches import Ellipse
-import matplotlib.transforms as transforms
 
 # Train data
 train_x = np.loadtxt("dataset1_G_noisy_ASCII/trn_x.txt")
@@ -66,9 +73,9 @@ ax.scatter(train_y[:,0], train_y[:,1],
 ax.legend()
 ax.grid(True)
 
-plt.show()
+#plt.show()
 
-exit()
+
 
 # ### (a) classify instances in tst_xy, and use the corresponding label file tst_xy_class to calculate the accuracy;
 
@@ -78,16 +85,17 @@ exit()
 
 
 # x statistics
-train_x_mean = np.mean(train_x)
-train_x_cov = np.cov(train_x)
+train_x_mean = np.mean(train_x, axis=0)
+train_x_cov  = np.cov(train_x, rowvar=False) 
 
 # y statistics
-train_y_mean = np.mean(train_y)
-train_y_cov = np.cov(train_y)
+train_y_mean = np.mean(train_y, axis=0)
+train_y_cov  = np.cov(train_y, rowvar=False)
 
 # priors
-# prior_x = ?
-# prior_y = ?
+prior_x = len(train_x_label)/(len(train_x_label)+len(train_y_label))
+prior_y = len(train_y_label)/(len(train_x_label)+len(train_y_label))
+# print(f"Prior_x = {prior_x}, prior_y = {prior_y}")
 
 
 # Now we need to a function for computing the likelihood of x and y given our test data.
@@ -98,9 +106,16 @@ train_y_cov = np.cov(train_y)
 # Define likelihood function
 # Implement your own or look on stack overflow if you are lazy - most important thing is that you understand what is going on
 
-# def likelihood(data, mean, cov):
-#     likelihood_value = ? 
-#     return likelihood_value
+def likelihood(data, mean, cov):
+    d = len(mean)
+    det_cov = np.linalg.det(cov)
+    inv_cov = np.linalg.inv(cov)
+    norm_const = 1.0 / (np.power((2 * np.pi), d/2) * np.sqrt(det_cov))
+
+    diff = data - mean
+    # Mahalanobis distance
+    exponent = -0.5 * np.einsum('...i,ij,...j', diff, inv_cov, diff)
+    return norm_const * np.exp(exponent)
 
 
 # To classify the test data we compute the likelihood of it being class x and class y
@@ -108,7 +123,9 @@ train_y_cov = np.cov(train_y)
 ## In[4]:
 
 
-# Compute likelihood of x and y
+likelihood_x = likelihood(test_xy, train_x_mean, train_x_cov)
+likelihood_y = likelihood(test_xy, train_y_mean, train_y_cov)
+print(f"likelihoodx = {likelihood_x}, likelihoody = {likelihood_y}")
 
 
 # We compute the posterior probability by taking the priors into account
@@ -116,8 +133,9 @@ train_y_cov = np.cov(train_y)
 ## In[ ]:
 
 
-# Compute posteriors from likelihood and prior
-
+posterior_x = prior_x * likelihood_x
+posterior_y = prior_y * likelihood_y
+print(f"likelihood post x = {posterior_x}, likelihood post y = {posterior_y}")
 
 # Now choose to classify our test data as belonging to the class with the highest posterior probability
 
@@ -125,80 +143,56 @@ train_y_cov = np.cov(train_y)
 
 
 # Remember that labels for x and y are are 1 and 2 respectively
-# classification = ?
+classification = np.where(posterior_x > posterior_y, 1, 2)
+accuracy_xy = np.mean(classification == test_xy_label)
+print(f"(a) Accuracy on tst_xy: {accuracy_xy*100:.2f}%")
 
 
 # We can compute the accuracy of our classifications by taking the sum of correct predictions and divide by the total number of predictions
 
 ## In[6]:
 
-
-# accuracy_xy = ?
-
-
-# ### (b) classify instances in tst_xy_126 by assuming a uniform prior over the space of hypotheses, and use the corresponding label file tst_xy_126_class to calculate the accuracy;
-
-# First we define our prior probabilities
-
 ## In[7]:
 
 
-# prior_x_uniform = ?
-# prior_y_uniform = ?
+prior_x_uniform = len(train_x_label)/(len(train_x_label)+len(train_y_label))
+prior_y_uniform = len(train_y_label)/(len(train_x_label)+len(train_y_label))
 
+likelihood_x_uniform = likelihood(test_xy_126, train_x_mean, train_x_cov)
+likelihood_y_uniform = likelihood(test_xy_126, train_y_mean, train_y_cov)
+
+posterior_x_uniform = prior_x_uniform * likelihood_x_uniform
+posterior_y_uniform = prior_y_uniform * likelihood_y_uniform
+
+classification_uniform = np.where(posterior_x_uniform > posterior_y_uniform, 1, 2)
+accuracy_xy_126_uniform = np.mean(classification_uniform == test_xy_126_label)
+print(f"(b) Accuracy with uniform prior: {accuracy_xy_126_uniform*100:.2f}%")
 
 # We can now compute posteriors knowing that the posterior probability is simply the prior, p(C), multiplied by the likelihood p(x, C).
 
 ## In[8]:
 
 
-# likelihood_x_uniform = ?
-# likelihood_y_uniform = ?
+prior_x_non_uniform = 0.9
+prior_y_non_uniform = 0.1
 
-# posterior_x_uniform = ?
-# posterior_y_uniform = ?
+likelihood_x_non_uniform = likelihood(test_xy_126, train_x_mean, train_x_cov)
+likelihood_y_non_uniform = likelihood(test_xy_126, train_y_mean, train_y_cov)
 
+posterior_x_non_uniform = prior_x_non_uniform * likelihood_x_non_uniform
+posterior_y_non_uniform = prior_y_non_uniform * likelihood_y_non_uniform
 
-# Now that we have posteriors for both x and y we can classify the test data and compute the accuracy
-
-## In[3]:
-
-
-# classification_uniform = ?
-
-# accuracy_xy_126_uniform = ?
-# print(f"Accuracy using uniform prior {accuracy_xy_126_uniform*100:.2f}%")
-
-
-# ### (c) classify instances in tst_xy_126 by assuming a prior probability of 0.9 for Class x and 0.1 for Class y, and use the corresponding label file tst_xy_126_class to calculate the accuracy; compare the results with those of (b).
-
-# Here we simply follow the procedure of (b), however, this time with updated priors
-
-## In[1]:
-
-
-# prior_x_non_uniform = ?
-# prior_y_non_uniform = ?
-
-# likelihood_x_non_uniform = ?
-# likelihood_y_non_uniform = ?
-# posterior_x_non_uniform = ?
-# posterior_y_non_uniform = ?
-
-# classification_non_uniform = ? 
-
-# accuracy_xy_126_non_uniform = ?
-
-# print(f"Accuracy using non-uniform prior {accuracy_xy_126_non_uniform*100:.2f}%")
+classification_non_uniform = np.where(posterior_x_non_uniform > posterior_y_non_uniform, 1, 2)
+accuracy_xy_126_non_uniform = np.mean(classification_non_uniform == test_xy_126_label)
+print(f"(c) Accuracy with non-uniform prior (0.9/0.1): {accuracy_xy_126_non_uniform*100:.2f}%")
 
 
 # Comparing the accuracy using uniform prior and non-uniform priors we see that using prior information about the data distribution improves classifcation accuracy by ?%.
 
 ## In[2]:
 
-
-# improvement = (accuracy_xy_126_non_uniform / accuracy_xy_126_uniform) - 1
-# print(f"Absolute improvement in accuracy {improvement*100:.2f}%")
+improvement = (accuracy_xy_126_non_uniform / accuracy_xy_126_uniform) - 1
+print(f"Improvement over uniform prior: {improvement*100:.2f}%")
 
 
 ## In[ ]:
