@@ -78,12 +78,12 @@ exit()
 
 
 # x statistics
-# train_x_mean = ?
-# train_x_cov = ?
+train_x_mean = np.mean(train_x)
+train_x_cov = np.cov(train_x)
 
 # y statistics
-# train_y_mean = ?
-# train_y_cov = ?
+train_y_mean = np.mean(train_y)
+train_y_cov = np.cov(train_y)
 
 # priors
 # prior_x = ?
