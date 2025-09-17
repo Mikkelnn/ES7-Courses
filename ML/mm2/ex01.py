@@ -1,6 +1,6 @@
 # ################################### 
 # Group ID : 343
-# Members : Johan Theil, Marcus Hodal, Mikkel Nielsen 
+# Members : Johan Theil, Marcus Hodal, Mikkel Nielsen, Karl Brandt
 # Date : 2025/09/12 
 # Lecture: 2 Bayesian decision theory
 # Dependencies: Virtual enviroment
@@ -166,6 +166,8 @@ posterior_y_uniform = prior_y_uniform * likelihood_y_uniform
 
 classification_uniform = np.where(posterior_x_uniform > posterior_y_uniform, 1, 2)
 accuracy_xy_126_uniform = np.mean(classification_uniform == test_xy_126_label)
+print(f"likelihoodx uniform = {likelihood_x_uniform}, likelihoody uniform = {likelihood_y_uniform}")
+print(f"likelihood post uniform = {posterior_x_uniform}, likelihood post y uniform = {posterior_y_uniform}")
 print(f"(b) Accuracy with uniform prior: {accuracy_xy_126_uniform*100:.2f}%")
 
 # We can now compute posteriors knowing that the posterior probability is simply the prior, p(C), multiplied by the likelihood p(x, C).
@@ -184,6 +186,8 @@ posterior_y_non_uniform = prior_y_non_uniform * likelihood_y_non_uniform
 
 classification_non_uniform = np.where(posterior_x_non_uniform > posterior_y_non_uniform, 1, 2)
 accuracy_xy_126_non_uniform = np.mean(classification_non_uniform == test_xy_126_label)
+print(f"likelihoodx 0.9/0.1 = {likelihood_x_non_uniform}, likelihoody 0.9/0.1 = {likelihood_y_non_uniform}")
+print(f"likelihood post 0.9/0.1 = {posterior_x_non_uniform}, likelihood post y 0.9/0.1 = {posterior_y_non_uniform}")
 print(f"(c) Accuracy with non-uniform prior (0.9/0.1): {accuracy_xy_126_non_uniform*100:.2f}%")
 
 
