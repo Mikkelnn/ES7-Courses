@@ -13,9 +13,7 @@ top = 2*a_mean - bottom
 xk = np.random.normal(a_mean, np.sqrt(b_var), n_samples)
 yk = np.random.uniform(bottom, top, n_samples)
 λ = 0.25
-zk = -1 * a_mean * np.log(top - yk)
-
-# zk = -1 * (1 / λ) * np.log(top - yk)
+zk = -1 * (1 / λ) * np.log(1 - (yk-bottom)/top)
 
 # # First stem plot
 # markerline1, stemlines1, baseline1 = plt.stem(xk, linefmt="C0-", markerfmt="C0o", basefmt=" ")
