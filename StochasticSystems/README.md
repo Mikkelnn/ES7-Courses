@@ -4,6 +4,11 @@ Each mini module has its own directory where it is as selfcontained as possible.
 
 First `cd` to the desired module and wollow directions in README.md
 
+### Init uv enviorment
+- If not already install uv: `https://docs.astral.sh/uv/getting-started/installation/`
+- init: `uv init --bare -p <python-version>` e.g. `uv init --bare -p 3.13`
+- add pip packages: `uv add <package list>`
+
 ### Python modules
 
 If a folder contains Python code, a virtual enviorment must be used within the folder named '.venv'
