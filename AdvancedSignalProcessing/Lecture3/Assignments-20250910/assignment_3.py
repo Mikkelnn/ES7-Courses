@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from scipy.io.wavfile import read, write
+from scipy.signal import stft
 import time
+
+import matplotlib.pyplot as plt
 
 # Read audio
 
@@ -10,6 +13,7 @@ fs1, d = read('Noise.wav')
 d = d/max(d)
 # Signal
 fs1, x = read('Music.wav')
+x_o = x
 x = x/max(x)
 # Noisy signal
 Fs, u = read('Noisy_Music.wav')
@@ -35,11 +39,11 @@ for n in range(0, N):
     w = w + mu*e*u_vect
     y[n] = np.matmul(w, u_vect)
 
-# y2 = [zeros(sampleDelay,1) ; y] ;
+#y2 = [zeros(sampleDelay,1) ; y] ;
 filtered_signal_LMS = u - y
 write("filtered_signal_LMS.wav", Fs, filtered_signal_LMS)
 # Below is 16 bit version
-# write(f"filtered_signal_LMS_16b.wav", Fs, (filtered_signal_LMS*u_max).astype(np.int16))
+write(f"filtered_signal_LMS_16b.wav", Fs, (filtered_signal_LMS*u_max).astype(np.int16))
 t1 = time.time()
 
 
@@ -62,7 +66,7 @@ for n in range(0, N):
 filtered_signal_NLMS = u - y
 write("filtered_signal_NLMS.wav", Fs, filtered_signal_NLMS)
 # Below is 16 bit version
-# write(f"filtered_signal_NLMS_16b.wav", Fs, (filtered_signal_NLMS*u_max).astype(np.int16))
+write(f"filtered_signal_NLMS_16b.wav", Fs, (filtered_signal_NLMS*u_max).astype(np.int16))
 t3 = time.time()
 
 
@@ -88,8 +92,22 @@ for n in range(0, N):
 filtered_signal_RLS = u - y
 write("filtered_signal_RLS.wav", Fs, filtered_signal_RLS)
 # Below is 16 bit version
-# write(f"filtered_signal_RLS_16b.wav", Fs, (filtered_signal_RLS*u_max).astype(np.int16))
+write(f"filtered_signal_RLS_16b.wav", Fs, (filtered_signal_RLS*u_max).astype(np.int16))
 t5 = time.time()
+
+f_n,t_n,z_n = stft(filtered_signal_NLMS*u_max,fs=Fs , nperseg=128, noverlap=128/2, nfft=1024)
+f_o,t_o,z_o = stft(x_o,fs=fs1 , nperseg=128, noverlap=128/2, nfft=1024)
+
+plt.figure(layout='constrained')
+plt.subplot(311)
+plt.pcolormesh(t_n, f_n, np.abs(z_n), shading='gouraud')
+plt.ylabel('MHz')
+plt.xlabel('Noise')
+plt.subplot(312)
+plt.pcolormesh(t_o, f_o, np.abs(z_o), shading='gouraud')
+plt.ylabel('MHz')
+plt.xlabel('Original')
+plt.show()
 
 print(f"LMS took  {t1-t0:>.3f}")
 print(f"NLMS took {t3-t2:>.3f}")
