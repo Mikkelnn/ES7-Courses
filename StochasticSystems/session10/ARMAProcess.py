@@ -37,16 +37,20 @@ def main(i):
     return  (mean, A)
 
 if __name__ == "__main__":
-    a = 1
-    b = 0
+    a = np.random(0,2)
+    b = np.random(-0.5,2)
     x = []
-    y = []
+    x[0] = 0
 
-    for i in tqdm(np.logspace(0,7,num=8)):
-        x.append(i)
-        (mean, A) = main(i)
-        y.append(mean-A)
-        print(f"iter {i}: mean {mean} A: {A}")
+    for var in tqdm(range(1, 5)):
+        Zprev = np.random.normal(0, var)
+        for a in np.linspace(0, 2, num=4):
+            for b in np.linspace(-2, 2, num=8):
+                for n in range(1,100):
+                    Znow = np.random.normal(0, var)
+                    x[n]=a*x[n-1] + b*Zprev + Znow
+                    Zprev = Znow
+            
 
     plt.stem(y) #Error plot
     plt.show()
