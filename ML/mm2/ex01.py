@@ -95,7 +95,7 @@ train_y_cov  = np.cov(train_y, rowvar=False)
 # priors
 prior_x = len(train_x_label)/(len(train_x_label)+len(train_y_label))
 prior_y = len(train_y_label)/(len(train_x_label)+len(train_y_label))
-# print(f"Prior_x = {prior_x}, prior_y = {prior_y}")
+print(f"Prior_x = {prior_x}, prior_y = {prior_y}")
 
 
 # Now we need to a function for computing the likelihood of x and y given our test data.
