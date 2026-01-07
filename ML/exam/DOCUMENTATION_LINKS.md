@@ -1,0 +1,3 @@
+- scipy: https://docs.scipy.org/doc/scipy/reference/index.html#scipy-api
+- scikit-learn: https://scikit-learn.org/stable/api/index.html
+- matplotlib: https://matplotlib.org/stable/api/index.html
