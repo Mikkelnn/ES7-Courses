@@ -129,5 +129,3 @@ plt.show()
 print("\n=== Confusion Matrix Summary ===")
 print(f"LDA + MLPC Accuracy: {lda_mlpc_accuracy*100:.2f}%")
 print(f"PCA + MLPC Accuracy: {pca_mlpc_accuracy*100:.2f}%")
-
-
